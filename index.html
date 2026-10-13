@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07070f">
+<title>PC28 Pro · 公式引擎</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page active" id="p-home">
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PC</div>
+      <div><h1>PC28 Pro</h1><div class="sub">FORMULA ENGINE · 公式引擎</div></div>
+    </div>
+    <div class="live" id="liveBox"><i></i><span id="liveTxt">连接中</span></div>
+  </div>
+
+  <div class="databar">
+    <div style="min-width:0;flex:1">
+      <div class="nm" id="srcName">正在接入开奖接口…</div>
+      <div class="ct" id="srcMeta">—</div>
+    </div>
+    <div class="cdbox" id="cdBox">
+      <div><div class="cl">下期开奖</div><div class="nx" id="cdNext">—</div></div>
+      <div class="cv" id="cdVal">--:--</div>
+    </div>
+    <div class="rf" onclick="manualRefresh()">⟳</div>
+  </div>
+
+  <div class="ldwrap" id="ldwrap">
+    <div class="ldrow"><span class="ldspin"></span><span class="ldt">公式引擎</span><span class="ldp" id="ldpct">0%</span></div>
+    <div class="ldbar"><i id="mbar"></i></div>
+    <div class="lds" id="mstat">正在装载开奖源…</div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><span class="t">最新一期开奖</span><span class="badge" id="drawBadge">—</span></div>
+    <div class="draw">
+      <div class="balls" id="drawBalls"></div>
+      <div class="draw-r">
+        <div class="iss" id="drawIssue">—</div>
+        <div class="tm" id="drawTime">—</div>
+        <div class="s" id="drawSum">—</div>
+        <div class="tags" id="drawTags"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card fcard">
+    <div class="card-h"><span class="t">公式预测</span><span class="badge" id="smBadge">回测 30 期</span></div>
+    <div class="seg2">
+      <button id="sm0" onclick="setSmart(0)">单门</button>
+      <button id="sm1" onclick="setSmart(1)">组合</button>
+      <button id="sm3" onclick="setSmart(3)">三门</button>
+      <button id="sm2" class="on" onclick="setSmart(2)">杀组</button>
+      <button id="sm4" onclick="setSmart(4)">2期</button>
+      <button id="sm5" onclick="setSmart(5)">3期</button>
+    </div>
+    <div class="fid">
+      <span class="no" id="smNo">00000</span>
+      <span class="ty" id="smTy">杀组</span>
+      <span class="hr"><span id="smHit">0/30</span> <small id="smPct">0%</small></span>
+    </div>
+    <div class="pred">
+      <div><div class="pl" id="smPl">预测形态</div><div class="pv" id="smVal">—</div></div>
+      <div class="pn">下一期<br><b id="smNext">—</b></div>
+    </div>
+    <div class="sums">
+      <div class="lb">推荐和值</div>
+      <div class="sumnav">
+        <span class="sn-l">和值码数</span>
+        <div class="sn-btns">
+          <button id="sn4" class="on" onclick="setSumN(4)">4码</button>
+          <button id="sn6" onclick="setSumN(6)">6码</button>
+        </div>
+      </div>
+      <div class="sumrow" id="smSums"></div>
+    </div>
+    <div class="nextrow"><span>公式 <b id="smFp">—</b> · 连挂 <b id="smKill">—</b></span><b id="smMaxMiss">—</b></div>
+    <div class="truth" id="truth"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><span class="t">预测历史</span><span class="badge" id="histBadge">近 30 期回测</span></div>
+    <div class="hist" id="hist"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><span class="t">实战预测记录</span><span class="badge" id="liveBadge">等待首期开奖</span></div>
+    <div class="tabs" id="liveTabs">
+      <button data-lt="0" onclick="setLiveTab(0)">单门</button>
+      <button data-lt="1" onclick="setLiveTab(1)">组合</button>
+      <button data-lt="2" class="on" onclick="setLiveTab(2)">杀组</button>
+      <button data-lt="3" onclick="setLiveTab(3)">三门</button>
+      <button data-lt="4" onclick="setLiveTab(4)">2期</button>
+      <button data-lt="5" onclick="setLiveTab(5)">3期</button>
+    </div>
+    <div class="lv-sum" id="liveStat">等待记录…</div>
+    <div class="lv" id="liveRows"></div>
+    <button class="btn-ghost" id="clrBtn" onclick="clearLog()">清空记录</button>
+  </div>
+</div>
+</div>
+
+<div class="page" id="p-rank">
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">选</div>
+      <div><h1>打法选择</h1><div class="sub">FORMULA RANK · TOP</div></div>
+    </div>
+    <div class="live"><i></i><span id="rankStat">—</span></div>
+  </div>
+  <div class="tabs" id="rankTabs">
+    <button class="on" data-rk="0" onclick="setRankTab(0)">单门</button>
+    <button data-rk="1" onclick="setRankTab(1)">组合</button>
+    <button data-rk="2" onclick="setRankTab(2)">杀组</button>
+    <button data-rk="3" onclick="setRankTab(3)">三门</button>
+    <button data-rk="4" onclick="setRankTab(4)">2期</button>
+    <button data-rk="5" onclick="setRankTab(5)">3期</button>
+  </div>
+  <div class="card">
+    <div class="card-h"><span class="t" id="rankTitle">杀组 · 命中排行</span><span class="badge" id="rankBadge">前 20</span></div>
+    <div class="grid" id="rankGrid"></div>
+    <button class="more" id="rankMore" onclick="moreRank()">展开更多公式</button>
+  </div>
+  <div class="card">
+    <div class="card-h"><span class="t">当前使用</span><span class="badge" id="useBadge">自适应</span></div>
+    <div class="fid">
+      <span class="no" id="useNo">00000</span>
+      <span class="ty" id="useTy">—</span>
+      <span class="hr"><span id="useHit">—</span></span>
+    </div>
+    <button class="cancel-pick" id="cancelPickBtn" onclick="cancelPick()">取消手动选择 · 回到自适应</button>
+  </div>
+</div>
+</div>
+
+<div class="pvmask" id="pvBox">
+  <div class="pvcard">
+    <div class="pv-h">
+      <div><div class="pv-no" id="pvNo">00000</div><div class="pv-ty" id="pvTy">—</div></div>
+      <div class="pv-r"><div class="pv-iss">下一期 <b id="pvIssue">—</b></div><div class="pv-hit" id="pvHit">—</div></div>
+    </div>
+    <div class="pv-body" id="pvBody"></div>
+    <div class="pv-btns">
+      <button class="pv-cancel" onclick="cancelPreview()">取消</button>
+      <button class="pv-use" onclick="applyPreview()">使用此公式</button>
+    </div>
+  </div>
+</div>
+
+<div class="tabbar">
+  <button class="on" id="tb0" onclick="go(0)"><span class="ic">◎</span>预测首页</button>
+  <button id="tb1" onclick="go(1)"><span class="ic">⌘</span>打法选择</button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
